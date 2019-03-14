@@ -1,0 +1,10 @@
+ADD_EXECUTABLE(pathtracer
+    main.cpp
+    camera.cpp
+    ray.cpp
+    scene.cpp
+    renderer.cpp
+    material.cpp
+    objects.cpp
+    lib/lodepng/lodepng.cpp
+    )
