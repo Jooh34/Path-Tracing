@@ -4,8 +4,14 @@
 #include "ray.h"
 #include "material.h"
 
-Material::Material(MaterialType type, Vec color, Vec emission) {
+Material::Material(MaterialType type, Vec color, Vec emittance) {
 	this->type=type;
     this->color=color;
-    this->emission=emission;
+    this->emittance=emittance;
+}
+
+Ray Material::getReflectedRay(const Ray &r, Vec &p, const Vec &n) {
+	if (m_type == SPEC) {
+        Vec reflected_ray = r.direction - n * (2 * n.dot(r.direction));
+	}
 }

@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     Scene scene = Scene();
 
     scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,0,0), 100, Material())) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(-300,300,0), 50, Material(EMIT, Vec(1,1,1), ))) );
 
     Renderer renderer = Renderer(&scene, &camera);
     renderer.render(samples);
