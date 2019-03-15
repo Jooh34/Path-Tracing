@@ -26,6 +26,18 @@ iostream
 lodepng.h
 /Users/jooh/workspace/Path-Tracing/lib/lodepng/lodepng.h
 
+/Users/jooh/workspace/Path-Tracing/main.cpp
+iostream
+-
+vector.h
+/Users/jooh/workspace/Path-Tracing/vector.h
+camera.h
+/Users/jooh/workspace/Path-Tracing/camera.h
+scene.h
+/Users/jooh/workspace/Path-Tracing/scene.h
+renderer.h
+/Users/jooh/workspace/Path-Tracing/renderer.h
+
 /Users/jooh/workspace/Path-Tracing/material.h
 vector.h
 /Users/jooh/workspace/Path-Tracing/vector.h
