@@ -20,6 +20,9 @@ public:
     Vec x_direction;
     Vec y_direction;
     Vec look_up;
+
+    double radius;
+    
     Camera(Vec position, Vec target, int width, int height, float vp_dist, int FOV);
     Ray getRay(int x, int y);
 };

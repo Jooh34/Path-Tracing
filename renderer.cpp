@@ -18,11 +18,18 @@ Renderer::Renderer(Scene *scene, Camera *camera) {
 void Renderer::render(int samples) {
     int width = camera->width;
     int height = camera->height;
-    int x,y;
+    int x,y,s;
+    Vec color;
+
     for(x = 0; x < width; x++) {
+
+        cout << "x : " << x << endl;
         for(y = 0; y< height; y++) {
-            Ray ray = camera->getRay(x, y);
-            Vec color = scene->traceRay(ray,0);
+            Vec color = Vec();
+            for(s = 0; s < samples; s++) {
+                Ray ray = camera->getRay(x, y);
+                color = color + scene->traceRay(ray,0)/samples;
+            }
             pixel_buffer[(y)*width + x] = color;
         }
     }

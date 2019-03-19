@@ -34,4 +34,15 @@ public:
 	virtual ObjectIntersection getIntersection(const Ray &r);
 };
 
+class Triangle : public Object {
+
+public:
+	Vec v1, v2, v3;
+	Vec n;
+	Material m;
+
+	Triangle(Vec v1, Vec v2, Vec v3, Material m);
+	virtual ObjectIntersection getIntersection(const Ray &r);
+};
+
 #endif
