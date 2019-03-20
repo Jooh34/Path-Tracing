@@ -24,15 +24,23 @@ ObjectIntersection Scene::intersect(const Ray &ray) {
 }
 
 Vec Scene::traceRay(const Ray &ray, int depth) {
-    if (depth > 5) return Vec(0, 0, 0);
     ObjectIntersection isct = intersect(ray);
     if (!isct.hit) return Vec(0, 0, 0);
-    if (isct.m.kd == 0 && isct.m.ks == 0) return isct.m.emittance;
 
     Vec color = isct.m.color;
+
+    // Russian Roulette
+    double p = max(color.x, max(color.y, color.z));
+    double rnd = (double) rand() / (RAND_MAX);
+    if (rnd > p * 0.9) {
+        return isct.m.emittance;
+    }
+    else { // Add the energy we 'lose' by randomly terminating paths
+        color = color / (0.9 * p);
+    }
 
     Vec hitP =  ray.origin + ray.direction * isct.u;
     Ray reflected_ray = isct.m.getReflectedRay(ray, hitP, isct.n);
 
-    return color.mult(traceRay(reflected_ray, depth+1));
+    return isct.m.emittance + color.mult(traceRay(reflected_ray, depth+1));
 }

@@ -25,7 +25,7 @@ Ray Material::getReflectedRay(const Ray &r, Vec &p, const Vec &n) {
     return Ray(p, d);
   }
   else {
-    double roughness = 0.8;
+    double roughness = 0;
     Vec reflected_ray = r.direction - n * (2 * n.dot(r.direction));
     double e1 = (double) rand() / (RAND_MAX) - 0.5;
     double e2 = (double) rand() / (RAND_MAX) - 0.5;

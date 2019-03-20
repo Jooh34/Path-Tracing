@@ -44,17 +44,17 @@ Ray Camera::getRay(int x, int y) {
     //
 
     // jitter for DOF
-    double radius = 10;
+    double radius = 20;
 
     double e1 = (double) rand() / (RAND_MAX) - 0.5;
     double e2 = (double) rand() / (RAND_MAX) - 0.5;
     double e3 = (double) rand() / (RAND_MAX) - 0.5;
-	  double d = radius * (double) rand() / (RAND_MAX);
+	double d = radius * (double) rand() / (RAND_MAX);
 
     Vec rand_vec = Vec(e1, e2, e3);
 
-	  Vec orth = (direction.cross(rand_vec)).norm();
+	Vec orth = (direction.cross(rand_vec)).norm();
     Vec jittered_position = position + orth * d;
     //
-    return Ray(position, (jittered_target - position).norm());
+    return Ray(jittered_position, (jittered_target - position).norm());
 }
