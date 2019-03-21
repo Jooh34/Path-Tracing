@@ -25,6 +25,7 @@ ObjectIntersection Scene::intersect(const Ray &ray) {
 
 Vec Scene::traceRay(const Ray &ray, int depth) {
     ObjectIntersection isct = intersect(ray);
+    if (depth > 10) return Vec(0, 0, 0);
     if (!isct.hit) return Vec(0, 0, 0);
 
     Vec color = isct.m.color;
@@ -32,11 +33,11 @@ Vec Scene::traceRay(const Ray &ray, int depth) {
     // Russian Roulette
     double p = max(color.x, max(color.y, color.z));
     double rnd = (double) rand() / (RAND_MAX);
-    if (rnd > p * 0.9) {
+    if (rnd > p) {
         return isct.m.emittance;
     }
     else { // Add the energy we 'lose' by randomly terminating paths
-        color = color / (0.9 * p);
+        color = color / p;
     }
 
     Vec hitP =  ray.origin + ray.direction * isct.u;

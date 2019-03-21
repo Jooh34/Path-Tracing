@@ -22,8 +22,8 @@ public:
     Vec look_up;
 
     double radius;
-    
-    Camera(Vec position, Vec target, int width, int height, float vp_dist, int FOV);
+
+    Camera(Vec position, Vec target, int width, int height, double vp_dist, int FOV);
     Ray getRay(int x, int y);
 };
 

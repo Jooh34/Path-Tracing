@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Camera::Camera(Vec position, Vec target, int width, int height, float vp_dist, int FOV) {
+Camera::Camera(Vec position, Vec target, int width, int height, double vp_dist, int FOV) {
     this->position = position;
     this->target = target;
     this->width = width;
@@ -18,7 +18,7 @@ Camera::Camera(Vec position, Vec target, int width, int height, float vp_dist, i
     direction = (target - position).norm();
 
     look_up = Vec(0, 1, 0);
-    radius = 5;
+    radius = 10;
 
     x_direction = direction.cross(look_up).norm();
     y_direction = x_direction.cross(direction).norm();
@@ -41,10 +41,8 @@ Ray Camera::getRay(int x, int y) {
     double jitter_y = (double) rand() / (RAND_MAX) - 0.5;
 
     Vec jittered_target = target_pixel + x_direction * jitter_x * px_width + y_direction * jitter_y * px_height;
-    //
 
     // jitter for DOF
-    double radius = 20;
 
     double e1 = (double) rand() / (RAND_MAX) - 0.5;
     double e2 = (double) rand() / (RAND_MAX) - 0.5;
@@ -56,5 +54,5 @@ Ray Camera::getRay(int x, int y) {
 	Vec orth = (direction.cross(rand_vec)).norm();
     Vec jittered_position = position + orth * d;
     //
-    return Ray(jittered_position, (jittered_target - position).norm());
+    return Ray(position, (jittered_target - position).norm());
 }
