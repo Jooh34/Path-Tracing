@@ -18,7 +18,7 @@ Camera::Camera(Vec position, Vec target, int width, int height, double vp_dist, 
     direction = (target - position).norm();
 
     look_up = Vec(0, 1, 0);
-    radius = 10;
+    radius = 30;
 
     x_direction = direction.cross(look_up).norm();
     y_direction = x_direction.cross(direction).norm();
@@ -54,5 +54,5 @@ Ray Camera::getRay(int x, int y) {
 	Vec orth = (direction.cross(rand_vec)).norm();
     Vec jittered_position = position + orth * d;
     //
-    return Ray(position, (jittered_target - position).norm());
+    return Ray(jittered_position, (jittered_target - jittered_position).norm());
 }

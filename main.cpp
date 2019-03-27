@@ -22,9 +22,9 @@ void drawRoom(Scene *scene, Vec origin, double size) {
   Vec p7 = origin + Vec(size, -size, -size);
   Vec p8 = origin + Vec(-size, -size, -size);
 
-  Material white = Material(Vec(0.8, 0.8, 0.8), 1, 0, 0, Vec(0,0,0));
-  Material red = Material(Vec(0.8, 0, 0), 1, 0, 0, Vec(0,0,0));
-  Material blue = Material(Vec(0, 0, 0.8), 1, 0, 0, Vec(0,0,0));
+  Material white = Material(Vec(0.8, 0.8, 0.8), 0, 0, 0, Vec(0,0,0));
+  Material red = Material(Vec(0.8, 0, 0), 0, 0, 0, Vec(0,0,0));
+  Material blue = Material(Vec(0, 0, 0.8), 0, 0, 0, Vec(0,0,0));
   drawSquare(scene, p1, p2, p3, p4, white);
   drawSquare(scene, p1, p2, p6, p5, white);
   drawSquare(scene, p2, p3, p7, p6, blue);
@@ -43,25 +43,57 @@ void drawLight(Scene *scene, Vec origin, double size) {
     drawSquare(scene, p1, p2, p3, p4, light);
 }
 
+void drawLeftLight(Scene *scene, Vec origin, double size) {
+    Material light = Material(Vec(0,0,0), 0, 0, 0, Vec(4,4,4));
+
+    Vec p1 = origin + Vec(0, -size, size);
+    Vec p2 = origin + Vec(0, size, size);
+    Vec p3 = origin + Vec(0, size, -size);
+    Vec p4 = origin + Vec(0, -size, -size);
+    drawSquare(scene, p1, p2, p3, p4, light);
+}
+
 int main(int argc, char *argv[]) {
     srand((unsigned int)time(NULL));
     time_t start, stop;
     time(&start);
 
-    int samples = 500;
+    int samples = 2500;
     if (argc == 2) samples = atoi(argv[1]);
 
-    Vec origin(0, 500, 1400);
-    Vec dest(0, 500, 0);
+    // First //
+    // Vec origin(0, 500, 1400);
+    // Vec dest(0, 500, 0);
+    //
+    // Camera camera = Camera(origin, dest, 500, 500, 400, 60);
+    // Scene scene = Scene();
+    //
+    // scene.add( dynamic_cast<Object*>(new Sphere(Vec(100,160,-300), 160, Material(Vec(1, 1, 1), 0, 0, 0, Vec(0,0,0)))) );
+    // scene.add( dynamic_cast<Object*>(new Sphere(Vec(200,120,200), 120, Material(Vec(1, 1, 1), 0, 1, 0.2, Vec(0,0,0)))) );
+    // scene.add( dynamic_cast<Object*>(new Sphere(Vec(-200,120,-200), 120, Material(Vec(1.0, 1.0, 1.0), 1, 0, 0, Vec(0,0,0)))) );
+    // scene.add( dynamic_cast<Object*>(new Sphere(Vec(-200,400,1000), 120, Material(Vec(0.1, 0.75, 1.0), 1, 0, 0, Vec(0,0,0)))) );
+    // drawRoom(&scene, Vec(0, 500, 0), 500);
+    // drawLight(&scene, Vec(0, 999, 0), 300);
+    ///////////
 
-    Camera camera = Camera(origin, dest, 500, 500, 1400, 60);
+    // Second //
+    Vec origin(0, 200, 700);
+    Vec dest(0, 200, 0);
+
+    Camera camera = Camera(origin, dest, 1200, 1200, 700, 60);
     Scene scene = Scene();
 
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(100,160,-300), 160, Material(Vec(1, 1, 1), 1, 0, 0, Vec(0,0,0)))) );
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(200,120,200), 120, Material(Vec(0.5, 0.5, 0.5), 0, 1, 1, Vec(0,0,0)))) );
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(-200,120,-200), 120, Material(Vec(1.0, 1.0, 1.0), 0, 1, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,100,0), 100, Material(Vec(1, 0.75, 1), 0, 0, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(250,100,0), 100, Material(Vec(1, 1, 1), 0, 1, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(-250,100,0), 100, Material(Vec(1, 1, 1), 1, 0, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(150,300,-400), 100, Material(Vec(0.2, 0.8, 0), 0.5, 0, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(-150,200,-400), 100, Material(Vec(0, 0.2, 1), 0.5, 0, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(150,100,1000), 100, Material(Vec(0.8, 0, 0.3), 0, 0, 0, Vec(0,0,0)))) );
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(-150,100,1000), 100, Material(Vec(0.2, 0.75, 0.6), 0, 0, 0, Vec(0,0,0)))) );
+
     drawRoom(&scene, Vec(0, 500, 0), 500);
-    drawLight(&scene, Vec(0, 999, 0), 300);
+    drawLeftLight(&scene, Vec(-499, 700, 0), 300);
+    ////////////
 
     Renderer renderer = Renderer(&scene, &camera);
     renderer.render(samples);
