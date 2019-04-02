@@ -24,4 +24,4 @@ TODO
 ----------------------
 - GPU acceleration ( with CUDA )
 - OBJ import
-- Acceleration algorithm (maybe BSP tree?)
+- Acceleration algorithm (kd tree?)
