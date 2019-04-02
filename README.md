@@ -12,6 +12,7 @@ Results
 
 Implemented
 ---------------------
+- Global Illumination
 - Diffuse Reflection
 - Specular Reflection
 - Soft Shadow
