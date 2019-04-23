@@ -7,4 +7,5 @@ ADD_EXECUTABLE(pathtracer
     material.cpp
     objects.cpp
     lib/lodepng/lodepng.cpp
+    lib/tinyobjloader/tiny_obj_loader.cc
     )

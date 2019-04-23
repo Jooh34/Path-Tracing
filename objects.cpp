@@ -50,6 +50,14 @@ Triangle::Triangle(Vec v1, Vec v2, Vec v3, Material m) {
 	this->n = ((v2-v1).cross(v3-v1)).norm();
 }
 
+Triangle::Triangle(Vec v1, Vec v2, Vec v3, Material m, Vec n) {
+	this->v1 = v1;
+	this->v2 = v2;
+	this->v3 = v3;
+	this->m = m;
+	this->n = n;
+}
+
 ObjectIntersection Triangle::getIntersection(const Ray &ray) {
 	Vec n = Vec();
 

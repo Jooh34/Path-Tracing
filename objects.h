@@ -42,6 +42,7 @@ public:
 	Material m;
 
 	Triangle(Vec v1, Vec v2, Vec v3, Material m);
+	Triangle(Vec v1, Vec v2, Vec v3, Material m, Vec n);
 	virtual ObjectIntersection getIntersection(const Ray &r);
 };
 

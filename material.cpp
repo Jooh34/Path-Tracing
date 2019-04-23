@@ -32,11 +32,11 @@ Ray Material::getReflectedRay(const Ray &r, Vec &p, const Vec &n) {
   		Vec refracN;
 
   		if(n.dot(L) > 0) { // out -> in
-  			ratio = 1 / 1.6;
+  			ratio = 1 / 1.3;
   			refracN = n;
   		}
   		else { // in -> out
-  			ratio = 1.6;
+  			ratio = 1.3;
   			refracN = n * (-1);
   		}
 
