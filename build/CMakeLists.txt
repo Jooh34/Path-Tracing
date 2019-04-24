@@ -1,0 +1,10 @@
+ADD_EXECUTABLE(pathtracer
+    ../src/main.cpp
+    ../src/camera.cpp
+    ../src/ray.cpp
+    ../src/scene.cpp
+    ../src/renderer.cpp
+    ../src/material.cpp
+    ../src/objects.cpp
+    ../lib/lodepng/lodepng.cpp
+    )

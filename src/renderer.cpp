@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "renderer.h"
-#include "lib/lodepng/lodepng.h"
+#include "../lib/lodepng/lodepng.h"
 using namespace std;
 
 inline double clamp(double x){ return x<0 ? 0 : x>1 ? 1 : x; }
