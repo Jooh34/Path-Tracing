@@ -18,7 +18,7 @@ Camera::Camera(Vec position, Vec target, int width, int height, double vp_dist, 
     direction = (target - position).norm();
 
     look_up = Vec(0, 1, 0);
-    radius = 30;
+    radius = 0;
 
     x_direction = direction.cross(look_up).norm();
     y_direction = x_direction.cross(direction).norm();

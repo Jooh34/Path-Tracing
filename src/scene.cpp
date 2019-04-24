@@ -28,20 +28,20 @@ Vec Scene::traceRay(const Ray &ray, int depth) {
     if (depth > 10) return Vec(0, 0, 0);
     if (!isct.hit) return Vec(0, 0, 0);
 
-    Vec color = isct.m.color;
+    Vec hitP = ray.origin + ray.direction * isct.u;
+    Vec color = isct.obj->getColor(hitP);
 
     // Russian Roulette
     double p = max(color.x, max(color.y, color.z));
     double rnd = (double) rand() / (RAND_MAX);
     if (rnd > p) {
-        return isct.m.emittance;
+        return isct.obj->m.emittance;
     }
     else { // Add the energy we 'lose' by randomly terminating paths
         color = color / p;
     }
 
-    Vec hitP =  ray.origin + ray.direction * isct.u;
-    Ray reflected_ray = isct.m.getReflectedRay(ray, hitP, isct.n);
+    Ray reflected_ray = isct.obj->m.getReflectedRay(ray, hitP, isct.n);
 
-    return isct.m.emittance + color.mult(traceRay(reflected_ray, depth+1));
+    return isct.obj->m.emittance + color.mult(traceRay(reflected_ray, depth+1));
 }

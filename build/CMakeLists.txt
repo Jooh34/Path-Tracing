@@ -6,5 +6,6 @@ ADD_EXECUTABLE(pathtracer
     ../src/renderer.cpp
     ../src/material.cpp
     ../src/objects.cpp
+    ../src/texture.cpp
     ../lib/lodepng/lodepng.cpp
     )
