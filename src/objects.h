@@ -4,7 +4,6 @@
 #include "vector.h"
 #include "material.h"
 #include "texture.h"
-
 #include <iostream>
 
 class Object;

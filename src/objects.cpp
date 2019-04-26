@@ -48,6 +48,15 @@ ObjectIntersection Sphere::getIntersection(const Ray &ray) {
 }
 
 Vec Sphere::getColor(Vec pHit) {
+	if (texture) {
+		Vec point = p-pHit;
+
+	    float y_len = sqrt(point.x * point.x + point.z * point.z);
+	    float phi = atan2(y_len, point.y);
+	    float theta = atan2(-point.z, point.x) + M_PI;
+
+	    return texture->getTextureColor(theta / (2 * M_PI), 1 - (phi / M_PI));
+	}
 	return m.color;
 }
 

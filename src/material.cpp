@@ -7,11 +7,12 @@
 #include <iostream>
 using namespace std;
 
-Material::Material(Vec color, double ks, double kr, double roughness, Vec emittance) {
+Material::Material(Vec color, double ks, double kr, double roughness, double r_i, Vec emittance) {
     this->color = color;
 	this->ks = ks;
 	this->kr = kr;
     this->roughness = roughness;
+    this->r_i = r_i;
     this->emittance = emittance;
 }
 
@@ -32,11 +33,11 @@ Ray Material::getReflectedRay(const Ray &r, Vec &p, const Vec &n) {
   		Vec refracN;
 
   		if(n.dot(L) > 0) { // out -> in
-  			ratio = 1 / 1.3;
+  			ratio = 1 / r_i;
   			refracN = n;
   		}
   		else { // in -> out
-  			ratio = 1.3;
+  			ratio = r_i;
   			refracN = n * (-1);
   		}
 
