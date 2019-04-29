@@ -23,6 +23,7 @@ public:
 	Vec p;
 	Material m;
 	Texture* texture;
+	Texture* bump;
 	virtual ObjectIntersection getIntersection(const Ray &r) = 0;
 	virtual Vec getColor(Vec pHit) = 0;
 };
@@ -33,7 +34,7 @@ class Sphere : public Object {
 public:
 	double r;
 
-	Sphere(Vec p, double r, Material m, Texture* texture = NULL);
+	Sphere(Vec p, double r, Material m, Texture* texture = NULL, Texture* bump = NULL);
 	virtual ObjectIntersection getIntersection(const Ray &r);
 	virtual Vec getColor(Vec pHit);
 };

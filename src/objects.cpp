@@ -17,11 +17,12 @@ ObjectIntersection::ObjectIntersection( bool hit, double u, Vec n, Object* obj)
 //////////////////
 // Sphere
 //////////////////
-Sphere::Sphere( Vec p, double r, Material m, Texture* texture) {
+Sphere::Sphere( Vec p, double r, Material m, Texture* texture, Texture* bump) {
 	this->p=p;
     this->r=r;
     this->m=m;
 	this->texture = texture;
+	this->bump = bump;
 }
 
 ObjectIntersection Sphere::getIntersection(const Ray &ray) {
@@ -34,16 +35,33 @@ ObjectIntersection Sphere::getIntersection(const Ray &ray) {
 	double det = (b * b) - op.dot(op) + (r * r);
 
 	if (det<0) return ObjectIntersection(hit, distance, n, this);
-	else {
-		double t1 = b-sqrt(det);
-	    double t2 = b+sqrt(det);
 
-	    distance = t1 > EPS ? t1 : ( t2 > EPS ? t2 : 0);
-		if (distance != 0) {
+	double t1 = b-sqrt(det);
+    double t2 = b+sqrt(det);
+
+    distance = t1 > EPS ? t1 : ( t2 > EPS ? t2 : 0);
+	if (distance != 0) {
 		hit = true;
 		n = ((ray.origin + ray.direction * distance) - p).norm();
+	}
+
+	// bump
+	if (bump) {
+		Vec point = p-pHit;
+	    double y_len = sqrt(point.x * point.x + point.z * point.z);
+	    double phi = atan2(y_len, point.y);
+	    double theta = atan2(-point.z, point.x) + M_PI;
+
+	    Vec bump_n = texture->getTextureColor(theta / (2 * M_PI), 1 - (phi / M_PI));
+
+		Vec z = Vec(0,0,1);
+		Vec axis = z.cross(n);
+		double angle = z.dot(n) / (z.mag() * n.mag());
+		if (angle == angle) { // if not nan
+
 		}
-  }
+ 	}
+
 	return ObjectIntersection(hit, distance, n, this);
 }
 
@@ -51,9 +69,9 @@ Vec Sphere::getColor(Vec pHit) {
 	if (texture) {
 		Vec point = p-pHit;
 
-	    float y_len = sqrt(point.x * point.x + point.z * point.z);
-	    float phi = atan2(y_len, point.y);
-	    float theta = atan2(-point.z, point.x) + M_PI;
+	    double y_len = sqrt(point.x * point.x + point.z * point.z);
+	    double phi = atan2(y_len, point.y);
+	    double theta = atan2(-point.z, point.x) + M_PI;
 
 	    return texture->getTextureColor(theta / (2 * M_PI), 1 - (phi / M_PI));
 	}

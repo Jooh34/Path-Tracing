@@ -77,16 +77,16 @@ void drawScene(int samples) {
     Vec origin(-300, 500, 700);
     Vec dest(0, 200, 0);
 
-    Camera camera = Camera(origin, dest, 400, 300, 700, 60);
+    Camera camera = Camera(origin, dest, 1600, 1200, 700, 60);
     Scene scene = Scene();
 
-    Texture* wood_wicker = new Texture("../texture/wood_wicker.png");
-    Texture* wood_wicker_bump = new Texture("../texture/wood_wicker_bump.png");
+    Texture* earth = new Texture("../texture/earth.png");
     Texture* brick = new Texture("../texture/brick.png");
     Texture* floor = new Texture("../texture/floor.png");
 
     // texture ball
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,100,0), 100, Material(Vec(1, 1, 1), 0.3, 0, 0.2), wood_wicker, wood_wicker_bump)));
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,100,0), 100, Material(Vec(1, 1, 1), 0.5, 0, 0.2), earth)));
+    scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,100,200), 80, Material(Vec(1, 1, 1), 0, 0, 0), brick)));
 
     // refraction ball
     scene.add( dynamic_cast<Object*>(new Sphere(Vec(250,100,0), 100, Material(Vec(1, 1, 1), 0, 1, 0, 1.6))) );
