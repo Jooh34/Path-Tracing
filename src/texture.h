@@ -16,7 +16,6 @@ public:
     unsigned width, height;
 
     Texture(const char* filename);
-    ~Texture();
 
     Vec getTextureColor(float u, float v);
 };

@@ -47,7 +47,7 @@ ObjectIntersection Sphere::getIntersection(const Ray &ray) {
 
 	// bump
 	if (bump) {
-		Vec point = p-pHit;
+		Vec point = p-hit;
 	    double y_len = sqrt(point.x * point.x + point.z * point.z);
 	    double phi = atan2(y_len, point.y);
 	    double theta = atan2(-point.z, point.x) + M_PI;
@@ -57,8 +57,11 @@ ObjectIntersection Sphere::getIntersection(const Ray &ray) {
 		Vec z = Vec(0,0,1);
 		Vec axis = z.cross(n);
 		double angle = z.dot(n) / (z.mag() * n.mag());
-		if (angle == angle) { // if not nan
-
+		if (angle != angle) { // if nan
+			return ObjectIntersection(hit, distance, bump_n, this);
+		}
+		else {
+			return ObjectIntersection(hit, distance, bump_n, this);
 		}
  	}
 
