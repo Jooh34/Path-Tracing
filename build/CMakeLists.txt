@@ -1,3 +1,5 @@
+set (CMAKE_CXX_STANDARD 11)
+
 ADD_EXECUTABLE(pathtracer
     ../src/main.cpp
     ../src/camera.cpp

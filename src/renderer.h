@@ -8,7 +8,7 @@ class Renderer {
 private:
     Scene *scene;
     Camera *camera;
-    Vec *pixel_buffer;
+    vec3 *pixel_buffer;
 
 public:
     Renderer(Scene *scene, Camera *camera);

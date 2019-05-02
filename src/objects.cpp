@@ -1,12 +1,13 @@
-#include "vector.h"
 #include "ray.h"
 #include "material.h"
 #include "objects.h"
-#include <cstdio>
+
+#include <glm/glm.hpp>
+using namespace glm;
 
 #define EPS 0.001f
 
-ObjectIntersection::ObjectIntersection( bool hit, double u, Vec n, Object* obj)
+ObjectIntersection::ObjectIntersection( bool hit, float u, vec3 n, Object* obj)
 {
 	this->hit=hit;
     this->u=u;
@@ -17,7 +18,7 @@ ObjectIntersection::ObjectIntersection( bool hit, double u, Vec n, Object* obj)
 //////////////////
 // Sphere
 //////////////////
-Sphere::Sphere( Vec p, double r, Material m, Texture* texture) {
+Sphere::Sphere( vec3 p, float r, Material m, Texture* texture) {
 	this->p=p;
     this->r=r;
     this->m=m;
@@ -26,30 +27,30 @@ Sphere::Sphere( Vec p, double r, Material m, Texture* texture) {
 
 ObjectIntersection Sphere::getIntersection(const Ray &ray) {
 	bool hit = false;
-	double distance = 0;
-	Vec n = Vec();
+	float distance = 0;
+	vec3 n = vec3();
 
-	Vec op = p-ray.origin;
-	double b = op.dot(ray.direction);
-	double det = (b * b) - op.dot(op) + (r * r);
+	vec3 op = p-ray.origin;
+	float b = dot(op, ray.direction);
+	float det = (b * b) - dot(op, op) + (r * r);
 
 	if (det<0) return ObjectIntersection(hit, distance, n, this);
 	else {
-		double t1 = b-sqrt(det);
-	    double t2 = b+sqrt(det);
+		float t1 = b-sqrt(det);
+	    float t2 = b+sqrt(det);
 
 	    distance = t1 > EPS ? t1 : ( t2 > EPS ? t2 : 0);
 		if (distance != 0) {
 		hit = true;
-		n = ((ray.origin + ray.direction * distance) - p).norm();
+		n = normalize((ray.origin + ray.direction * distance) - p);
 		}
   }
 	return ObjectIntersection(hit, distance, n, this);
 }
 
-Vec Sphere::getColor(Vec pHit) {
+vec3 Sphere::getColor(vec3 pHit) {
 	if (texture) {
-		Vec point = p-pHit;
+		vec3 point = p-pHit;
 
 	    float y_len = sqrt(point.x * point.x + point.z * point.z);
 	    float phi = atan2(y_len, point.y);
@@ -63,44 +64,44 @@ Vec Sphere::getColor(Vec pHit) {
 //////////////////
 // Triangle
 //////////////////
-Triangle::Triangle(Vec v1, Vec v2, Vec v3, Material m, Texture* texture) {
+Triangle::Triangle(vec3 v1, vec3 v2, vec3 v3, Material m, Texture* texture) {
 	this->v1 = v1;
 	this->v2 = v2;
 	this->v3 = v3;
 	this->m = m;
-	this->n = ((v2-v1).cross(v3-v1)).norm();
+	this->n = normalize(cross(v2-v1, v3-v1));
 	this->texture = texture;
 }
 
 ObjectIntersection Triangle::getIntersection(const Ray &ray) {
-	Vec n = Vec();
+	vec3 n = vec3();
 
-	Vec e1,e2,h,s,q;
-	double det,f,u,v;
+	vec3 e1,e2,h,s,q;
+	float det,f,u,v;
 
 	e1 = v2-v1;
 	e2 = v3-v1;
 
-	Vec dir = ray.direction;
-	h = dir.cross(e2);
-	det = e1.dot(h);
+	vec3 dir = ray.direction;
+	h = cross(dir, e2);
+	det = dot(e1, h);
 	if (abs(det)<EPS) return ObjectIntersection(false, 0, n, this);
 
 	f = 1/det;
 	s = ray.origin-v1;
-	u = s.dot(h) * f;
+	u = dot(s, h) * f;
 
 	if (u < 0.0 || u > 1.0) return ObjectIntersection(false, 0, n, this);
 
-	q = s.cross(e1);
-	v = ray.direction.dot(q) * f;
+	q = cross(s, e1);
+	v = dot(ray.direction, q) * f;
 
 	if (v < 0.0f || v + u > 1.0) return ObjectIntersection(false, 0, n, this);
 
-	float t = e2.dot(q) * f;
+	float t = dot(e2, q) * f;
 
 	if(t>EPS) {
-	if(this->n.dot(ray.direction) > 0) n = this->n * (-1);
+	if(dot(this->n, ray.direction) > 0) n = this->n * (-1.0f);
 	else n = this->n;
 		return ObjectIntersection(true, t, n, this);
 	}
@@ -108,51 +109,51 @@ ObjectIntersection Triangle::getIntersection(const Ray &ray) {
 	return ObjectIntersection(false, 0, n, this);
 }
 
-Vec Triangle::getColor(Vec pHit) {
+vec3 Triangle::getColor(vec3 pHit) {
 	return m.color;
 }
 
 //////////////////
 // Quadrangle
 //////////////////
-Quadrangle::Quadrangle(Vec v1, Vec v2, Vec v3, Vec v4, Material m, Texture* texture) {
+Quadrangle::Quadrangle(vec3 v1, vec3 v2, vec3 v3, vec3 v4, Material m, Texture* texture) {
 	this->v1 = v1;
 	this->v2 = v2;
 	this->v3 = v3;
 	this->v4 = v4;
 	this->m = m;
-	this->n = ((v2-v1).cross(v4-v1)).norm();
+	this->n = normalize(cross(v2-v1, v4-v1));
 	this->texture = texture;
 }
-ObjectIntersection Quadrangle::getHalfIntersection(const Ray &ray, Vec v1, Vec v2, Vec v3) {
-	Vec n = Vec();
+ObjectIntersection Quadrangle::getHalfIntersection(const Ray &ray, vec3 v1, vec3 v2, vec3 v3) {
+	vec3 n = vec3();
 
-	Vec e1,e2,h,s,q;
-	double det,f,u,v;
+	vec3 e1,e2,h,s,q;
+	float det,f,u,v;
 
 	e1 = v2-v1;
 	e2 = v3-v1;
 
-	Vec dir = ray.direction;
-	h = dir.cross(e2);
-	det = e1.dot(h);
+	vec3 dir = ray.direction;
+	h = cross(dir, e2);
+	det = dot(e1, h);
 	if (abs(det)<EPS) return ObjectIntersection(false, 0, n, this);
 
 	f = 1/det;
 	s = ray.origin-v1;
-	u = s.dot(h) * f;
+	u = dot(s, h) * f;
 
 	if (u < 0.0 || u > 1.0) return ObjectIntersection(false, 0, n, this);
 
-	q = s.cross(e1);
-	v = ray.direction.dot(q) * f;
+	q = cross(s, e1);
+	v = dot(ray.direction, q) * f;
 
 	if (v < 0.0f || v + u > 1.0) return ObjectIntersection(false, 0, n, this);
 
-	float t = e2.dot(q) * f;
+	float t = dot(e2, q) * f;
 
 	if(t>EPS) {
-	if(this->n.dot(ray.direction) > 0) n = this->n * (-1);
+	if(dot(this->n, ray.direction) > 0) n = this->n * (-1.0f);
 	else n = this->n;
 		return ObjectIntersection(true, t, n, this);
 	}
@@ -165,22 +166,22 @@ ObjectIntersection Quadrangle::getIntersection(const Ray &ray) {
 	ObjectIntersection isct2 = getHalfIntersection(ray, v3, v4, v1);
 	if (isct1.hit) return isct1;
 	if (isct2.hit) return isct2;
-	return ObjectIntersection(false, 0, Vec(), this);
+	return ObjectIntersection(false, 0, vec3(), this);
 }
 
-Vec Quadrangle::getColor(Vec pHit) {
+vec3 Quadrangle::getColor(vec3 pHit) {
 	if (texture) {
-		Vec w_vec = v1-v2;
-	    Vec h_vec = v3-v2;
+		vec3 w_vec = v1-v2;
+	    vec3 h_vec = v3-v2;
 
-	    Vec P = pHit-v2;
-	    float l = P.mag();
+	    vec3 P = pHit-v2;
+	    float l = length(P);
 
-	    float cos_w = (P.dot(w_vec))/(l*w_vec.mag());
-	    float cos_h = (P.dot(h_vec))/(l*h_vec.mag());
+	    float cos_w = (dot(P, w_vec))/(l*length(w_vec));
+	    float cos_h = (dot(P, h_vec))/(l*length(h_vec));
 
-	    float u = (l * cos_w) / w_vec.mag();
-	    float v = (l * cos_h) / h_vec.mag();
+	    float u = (l * cos_w) / length(w_vec);
+	    float v = (l * cos_h) / length(h_vec);
 
 	    return texture->getTextureColor(u,v);
 	}

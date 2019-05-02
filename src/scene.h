@@ -1,9 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <vector>
 #include "ray.h"
 #include "objects.h"
+
+#include <vector>
 
 class Scene {
 public:
@@ -12,7 +13,7 @@ public:
     Scene(){};
     void add(Object *object);
     ObjectIntersection intersect(const Ray &ray);
-    Vec traceRay(const Ray &ray, int depth);
+    vec3 traceRay(const Ray &ray, int depth);
 };
 
 #endif

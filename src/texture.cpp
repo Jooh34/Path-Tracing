@@ -1,16 +1,19 @@
 #include "texture.h"
 
+#include <glm/glm.hpp>
+using namespace glm;
+
 Texture :: Texture (const char* filename) {
     unsigned error = lodepng::decode(image, width, height, filename);
 }
 
-Vec Texture :: getTextureColor(float u, float v) {
+vec3 Texture :: getTextureColor(float u, float v) {
     unsigned x = round((width * u)+0.5);
     unsigned y = round((height * v)+0.5);
 
-    double r = (double) image[4 * width * y + 4 * x + 0] / 255;
-    double g = (double) image[4 * width * y + 4 * x + 1] / 255;
-    double b = (double) image[4 * width * y + 4 * x + 2] / 255;
+    float r = (float) image[4 * width * y + 4 * x + 0] / 255;
+    float g = (float) image[4 * width * y + 4 * x + 1] / 255;
+    float b = (float) image[4 * width * y + 4 * x + 2] / 255;
 
-    return Vec(r,g,b);
+    return vec3(r,g,b);
 }

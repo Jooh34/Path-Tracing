@@ -1,12 +1,11 @@
-#include "vector.h"
 #include "camera.h"
 #include "ray.h"
-#include <iostream>
+
 #include <math.h>
+#include <glm/glm.hpp>
+using namespace glm;
 
-using namespace std;
-
-Camera::Camera(Vec position, Vec target, int width, int height, double vp_dist, int FOV) {
+Camera::Camera(vec3 position, vec3 target, int width, int height, float vp_dist, int FOV) {
     this->position = position;
     this->target = target;
     this->width = width;
@@ -14,45 +13,45 @@ Camera::Camera(Vec position, Vec target, int width, int height, double vp_dist, 
     this->vp_dist = vp_dist;
     this->FOV = FOV;
 
-    ratio = (double)width/(double)height;
-    direction = (target - position).norm();
+    ratio = (float)width/(float)height;
+    direction = normalize(target - position);
 
-    look_up = Vec(0, 1, 0);
+    look_up = vec3(0, 1, 0);
     radius = 0;
 
-    x_direction = direction.cross(look_up).norm();
-    y_direction = x_direction.cross(direction).norm();
+    x_direction = normalize(cross(direction, look_up));
+    y_direction = normalize(cross(x_direction, direction));
 }
 
 
 Ray Camera::getRay(int x, int y) {
-    Vec center = position + direction * vp_dist;
-    double vp_width = 2 * vp_dist * tan((FOV/2) * M_PI / 180.0);
-    double vp_height = 1./ratio * vp_width;
+    vec3 center = position + direction * vp_dist;
+    float vp_width = 2 * vp_dist * tan((FOV/2) * M_PI / 180.0);
+    float vp_height = 1./ratio * vp_width;
 
-    double px_width = vp_width / width;
-    double px_height = vp_height / height;
+    float px_width = vp_width / width;
+    float px_height = vp_height / height;
 
-    Vec start_pixel = center - x_direction * (vp_width/2) + y_direction * (vp_height/2);
-    Vec target_pixel = start_pixel + x_direction * px_width * (x+0.5) - y_direction * px_height * (y+0.5);
+    vec3 start_pixel = center - x_direction * (vp_width/2) + y_direction * (vp_height/2);
+    vec3 target_pixel = start_pixel + x_direction * (px_width * (x+0.5f)) - y_direction * (px_height * (y+0.5f));
 
     // jitter for anti-aliasing
-    double jitter_x = (double) rand() / (RAND_MAX) - 0.5;
-    double jitter_y = (double) rand() / (RAND_MAX) - 0.5;
+    float jitter_x = (float) rand() / (RAND_MAX) - 0.5;
+    float jitter_y = (float) rand() / (RAND_MAX) - 0.5;
 
-    Vec jittered_target = target_pixel + x_direction * jitter_x * px_width + y_direction * jitter_y * px_height;
+    vec3 jittered_target = target_pixel + x_direction * jitter_x * px_width + y_direction * jitter_y * px_height;
 
     // jitter for DOF
 
-    double e1 = (double) rand() / (RAND_MAX) - 0.5;
-    double e2 = (double) rand() / (RAND_MAX) - 0.5;
-    double e3 = (double) rand() / (RAND_MAX) - 0.5;
-	double d = radius * (double) rand() / (RAND_MAX);
+    float e1 = (float) rand() / (RAND_MAX) - 0.5;
+    float e2 = (float) rand() / (RAND_MAX) - 0.5;
+    float e3 = (float) rand() / (RAND_MAX) - 0.5;
+	float d = radius * (float) rand() / (RAND_MAX);
 
-    Vec rand_vec = Vec(e1, e2, e3);
+    vec3 rand_vec = vec3(e1, e2, e3);
 
-	Vec orth = (direction.cross(rand_vec)).norm();
-    Vec jittered_position = position + orth * d;
-    //
-    return Ray(jittered_position, (jittered_target - jittered_position).norm());
+	vec3 orth = normalize(cross(direction, rand_vec));
+    vec3 jittered_position = position + orth * d;
+
+    return Ray(jittered_position, normalize(jittered_target - jittered_position));
 }

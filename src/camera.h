@@ -1,29 +1,31 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "vector.h"
 #include "ray.h"
+
+#include <glm/glm.hpp>
+using namespace glm;
 
 class Camera {
 
 public:
-    Vec position;
-    Vec target;
-    Vec direction;
+    vec3 position;
+    vec3 target;
+    vec3 direction;
 
     int width;
     int height;
-    double vp_dist;
+    float vp_dist;
     int FOV;
-    double ratio;
+    float ratio;
 
-    Vec x_direction;
-    Vec y_direction;
-    Vec look_up;
+    vec3 x_direction;
+    vec3 y_direction;
+    vec3 look_up;
 
-    double radius;
+    float radius;
 
-    Camera(Vec position, Vec target, int width, int height, double vp_dist, int FOV);
+    Camera(vec3 position, vec3 target, int width, int height, float vp_dist, int FOV);
     Ray getRay(int x, int y);
 };
 

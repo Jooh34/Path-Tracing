@@ -1,13 +1,13 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "vector.h"
+#include "../lib/lodepng/lodepng.h"
+
 #include <stdio.h>
 #include <vector>
-#include "../lib/lodepng/lodepng.h"
 #include <iostream>
-
-using namespace std;
+#include <glm/glm.hpp>
+using namespace glm;
 
 class Texture
 {
@@ -16,9 +16,8 @@ public:
     unsigned width, height;
 
     Texture(const char* filename);
-    ~Texture();
 
-    Vec getTextureColor(float u, float v);
+    vec3 getTextureColor(float u, float v);
 };
 
 #endif

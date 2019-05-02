@@ -1,62 +1,62 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 
-#include "vector.h"
 #include "material.h"
 #include "texture.h"
-#include <iostream>
 
 class Object;
 struct ObjectIntersection {
 	bool hit;	// If there was an intersection
-	double u;	// Distance to intersection along ray
-	Vec n;		// Normal of intersected face
+	float u;	// Distance to intersection along ray
+	vec3 n;		// Normal of intersected face
 	Object* obj; // intersected obj
 
-	ObjectIntersection(bool hit_=false, double u_=0, Vec n_=Vec(), Object* obj=NULL);
+	ObjectIntersection(bool hit_=false, float u_=0, vec3 n_=vec3(), Object* obj=NULL);
 };
 
 
 
 class Object {
 public:
-	Vec p;
+	vec3 p;
 	Material m;
 	Texture* texture;
+
+	virtual ~Object() = default;
 	virtual ObjectIntersection getIntersection(const Ray &r) = 0;
-	virtual Vec getColor(Vec pHit) = 0;
+	virtual vec3 getColor(vec3 pHit) = 0;
 };
 
 
 
 class Sphere : public Object {
 public:
-	double r;
+	float r;
 
-	Sphere(Vec p, double r, Material m, Texture* texture = NULL);
+	Sphere(vec3 p, float r, Material m, Texture* texture = NULL);
 	virtual ObjectIntersection getIntersection(const Ray &r);
-	virtual Vec getColor(Vec pHit);
+	virtual vec3 getColor(vec3 pHit);
 };
 
 class Triangle : public Object {
 public:
-	Vec v1, v2, v3;
-	Vec n;
+	vec3 v1, v2, v3;
+	vec3 n;
 
-	Triangle(Vec v1, Vec v2, Vec v3, Material m, Texture* texture = NULL);
+	Triangle(vec3 v1, vec3 v2, vec3 v3, Material m, Texture* texture = NULL);
 	virtual ObjectIntersection getIntersection(const Ray &r);
-	virtual Vec getColor(Vec pHit);
+	virtual vec3 getColor(vec3 pHit);
 };
 
 class Quadrangle : public Object {
 public:
-	Vec v1, v2, v3, v4;
-	Vec n;
+	vec3 v1, v2, v3, v4;
+	vec3 n;
 
-	Quadrangle(Vec v1, Vec v2, Vec v3, Vec v4, Material m, Texture* texture = NULL);
-	ObjectIntersection getHalfIntersection(const Ray &ray, Vec v1, Vec v2, Vec v3);
+	Quadrangle(vec3 v1, vec3 v2, vec3 v3, vec3 v4, Material m, Texture* texture = NULL);
+	ObjectIntersection getHalfIntersection(const Ray &ray, vec3 v1, vec3 v2, vec3 v3);
 	virtual ObjectIntersection getIntersection(const Ray &r);
-	virtual Vec getColor(Vec pHit);
+	virtual vec3 getColor(vec3 pHit);
 };
 
 #endif

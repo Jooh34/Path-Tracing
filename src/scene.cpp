@@ -2,7 +2,6 @@
 #include "objects.h"
 
 #include <iostream>
-using namespace std;
 
 void Scene::add(Object *object) {
     objects.push_back( object );
@@ -23,17 +22,17 @@ ObjectIntersection Scene::intersect(const Ray &ray) {
     return isct;
 }
 
-Vec Scene::traceRay(const Ray &ray, int depth) {
+vec3 Scene::traceRay(const Ray &ray, int depth) {
     ObjectIntersection isct = intersect(ray);
-    if (depth > 10) return Vec(0, 0, 0);
-    if (!isct.hit) return Vec(0, 0, 0);
+    if (depth > 10) return vec3(0, 0, 0);
+    if (!isct.hit) return vec3(0, 0, 0);
 
-    Vec hitP = ray.origin + ray.direction * isct.u;
-    Vec color = isct.obj->getColor(hitP);
+    vec3 hitP = ray.origin + ray.direction * isct.u;
+    vec3 color = isct.obj->getColor(hitP);
 
     // Russian Roulette
-    double p = max(color.x, max(color.y, color.z));
-    double rnd = (double) rand() / (RAND_MAX);
+    float p = std::max(color.x, std::max(color.y, color.z));
+    float rnd = (float) rand() / (RAND_MAX);
     if (rnd > p) {
         return isct.obj->m.emittance;
     }
@@ -43,5 +42,5 @@ Vec Scene::traceRay(const Ray &ray, int depth) {
 
     Ray reflected_ray = isct.obj->m.getReflectedRay(ray, hitP, isct.n);
 
-    return isct.obj->m.emittance + color.mult(traceRay(reflected_ray, depth+1));
+    return isct.obj->m.emittance + color * traceRay(reflected_ray, depth+1);
 }

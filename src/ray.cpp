@@ -1,7 +1,6 @@
-#include "vector.h"
 #include "ray.h"
 
-Ray::Ray(Vec origin, Vec direction) {
+Ray::Ray(vec3 origin, vec3 direction) {
     this->origin = origin;
     this->direction = direction;
 }

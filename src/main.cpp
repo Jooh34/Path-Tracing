@@ -1,39 +1,39 @@
-#include <iostream>
-#include <ctime>
-
-#include "vector.h"
 #include "camera.h"
 #include "scene.h"
 #include "renderer.h"
 
-using namespace std;
+#include <iostream>
+#include <ctime>
+#include <memory>
+#include <glm/glm.hpp>
+using namespace glm;
 
-void drawSquare(Scene *scene, Vec p1, Vec p2, Vec p3, Vec p4, Material m, Texture* texture=NULL) {
-    scene->add(dynamic_cast<Object*> (new Quadrangle(p1, p2, p3, p4, m, texture)));
+void drawSquare(Scene *scene, vec3 p1, vec3 p2, vec3 p3, vec3 p4, Material m, Texture* texture=NULL) {
+    scene->add(new Quadrangle(p1, p2, p3, p4, m, texture));
 }
 
-void drawRoom(Scene *scene, Vec origin, double size, Texture* brick, Texture* floor) {
-    Vec p1 = origin + Vec(-size, size, size+1000);
-    Vec p2 = origin + Vec(size, size, size+1000);
-    Vec p3 = origin + Vec(size, size, -size);
-    Vec p4 = origin + Vec(-size, size, -size);
-    Vec p5 = origin + Vec(-size, -size, size+1000);
-    Vec p6 = origin + Vec(size, -size, size+1000);
-    Vec p7 = origin + Vec(size, -size, -size);
-    Vec p8 = origin + Vec(-size, -size, -size);
+void drawRoom(Scene *scene, vec3 origin, float size, Texture* brick, Texture* floor) {
+    vec3 p1 = origin + vec3(-size, size, size+1000);
+    vec3 p2 = origin + vec3(size, size, size+1000);
+    vec3 p3 = origin + vec3(size, size, -size);
+    vec3 p4 = origin + vec3(-size, size, -size);
+    vec3 p5 = origin + vec3(-size, -size, size+1000);
+    vec3 p6 = origin + vec3(size, -size, size+1000);
+    vec3 p7 = origin + vec3(size, -size, -size);
+    vec3 p8 = origin + vec3(-size, -size, -size);
 
-    Vec f1 = origin + Vec(-size, -size, size);
-    Vec f2 = origin + Vec(size, -size, size);
-    Vec f3 = origin + Vec(size, -size, -size);
-    Vec f4 = origin + Vec(-size, -size, -size);
-    Vec f5 = origin + Vec(-size, -size, size+1000);
-    Vec f6 = origin + Vec(size, -size, size+1000);
-    Vec f7 = origin + Vec(size, -size, size);
-    Vec f8 = origin + Vec(-size, -size, size);
+    vec3 f1 = origin + vec3(-size, -size, size);
+    vec3 f2 = origin + vec3(size, -size, size);
+    vec3 f3 = origin + vec3(size, -size, -size);
+    vec3 f4 = origin + vec3(-size, -size, -size);
+    vec3 f5 = origin + vec3(-size, -size, size+1000);
+    vec3 f6 = origin + vec3(size, -size, size+1000);
+    vec3 f7 = origin + vec3(size, -size, size);
+    vec3 f8 = origin + vec3(-size, -size, size);
 
-    Material white = Material(Vec(0.8, 0.8, 0.8), 0, 0, 0);
-    Material red = Material(Vec(0.8, 0, 0), 0, 0, 0);
-    Material blue = Material(Vec(0, 0, 0.8), 0, 0, 0);
+    Material white = Material(vec3(0.8, 0.8, 0.8), 0, 0, 0);
+    Material red = Material(vec3(0.8, 0, 0), 0, 0, 0);
+    Material blue = Material(vec3(0, 0, 0.8), 0, 0, 0);
 
     drawSquare(scene, p1, p2, p3, p4, white);
     drawSquare(scene, p1, p2, p6, p5, white);
@@ -45,58 +45,63 @@ void drawRoom(Scene *scene, Vec origin, double size, Texture* brick, Texture* fl
 }
 
 void drawMirror(Scene *scene) {
-    Vec p1 = Vec(-400, 300, -150);
-    Vec p2 = Vec(300, 300, -300);
-    Vec p3 = Vec(300, 0, -300);
-    Vec p4 = Vec(-400, 0, -150);
-    Material mirror = Material(Vec(1, 1, 1), 1, 0, 0);
+    vec3 p1 = vec3(-400, 300, -150);
+    vec3 p2 = vec3(300, 300, -300);
+    vec3 p3 = vec3(300, 0, -300);
+    vec3 p4 = vec3(-400, 0, -150);
+    Material mirror = Material(vec3(1, 1, 1), 1, 0, 0);
     drawSquare(scene, p1, p2, p3, p4, mirror);
 }
 
-void drawLight(Scene *scene, Vec origin, double size) {
-    Material light = Material(Vec(0,0,0), 0, 0, 0, 1, Vec(4,4,4));
+void drawLight(Scene *scene, vec3 origin, float size) {
+    Material light = Material(vec3(0,0,0), 0, 0, 0, 1, vec3(4,4,4));
 
-    Vec p1 = origin + Vec(-size, 0, size);
-    Vec p2 = origin + Vec(size, 0, size);
-    Vec p3 = origin + Vec(size, 0, -size);
-    Vec p4 = origin + Vec(-size, 0, -size);
+    vec3 p1 = origin + vec3(-size, 0, size);
+    vec3 p2 = origin + vec3(size, 0, size);
+    vec3 p3 = origin + vec3(size, 0, -size);
+    vec3 p4 = origin + vec3(-size, 0, -size);
     drawSquare(scene, p1, p2, p3, p4, light);
 }
 
-void drawLeftLight(Scene *scene, Vec origin, double size) {
-    Material light = Material(Vec(0,0,0), 0, 0, 0, 1, Vec(4,4,4));
+void drawLeftLight(Scene *scene, vec3 origin, float size) {
+    Material light = Material(vec3(0,0,0), 0, 0, 0, 1, vec3(4,4,4));
 
-    Vec p1 = origin + Vec(0, -size, size);
-    Vec p2 = origin + Vec(0, size, size);
-    Vec p3 = origin + Vec(0, size, -size);
-    Vec p4 = origin + Vec(0, -size, -size);
+    vec3 p1 = origin + vec3(0, -size, size);
+    vec3 p2 = origin + vec3(0, size, size);
+    vec3 p3 = origin + vec3(0, size, -size);
+    vec3 p4 = origin + vec3(0, -size, -size);
     drawSquare(scene, p1, p2, p3, p4, light);
 }
 
 void drawScene(int samples) {
-    Vec origin(-300, 500, 700);
-    Vec dest(0, 200, 0);
+    vec3 origin(-300, 500, 700);
+    vec3 dest(0, 200, 0);
 
-    Camera camera = Camera(origin, dest, 1600, 1200, 700, 60);
+    Camera camera = Camera(origin, dest, 400, 300, 700, 60);
     Scene scene = Scene();
 
-    Texture* earth = new Texture("../texture/earth.png");
-    Texture* brick = new Texture("../texture/brick.png");
-    Texture* floor = new Texture("../texture/floor.png");
+    std::unique_ptr<Texture> earth(new Texture("../texture/earth.png"));
+    std::unique_ptr<Texture> brick(new Texture("../texture/brick.png"));
+    std::unique_ptr<Texture> floor(new Texture("../texture/floor.png"));
 
     // texture ball
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,100,0), 100, Material(Vec(1, 1, 1), 0.5, 0, 0.2), earth)));
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(0,100,200), 80, Material(Vec(1, 1, 1), 0, 0, 0), brick)));
+    std::unique_ptr<Object> obj1(new Sphere(vec3(0,100,0), 100, Material(vec3(1, 1, 1), 0.5, 0, 0.2), earth.get()));
+    std::unique_ptr<Object> obj2(new Sphere(vec3(0,100,200), 80, Material(vec3(1, 1, 1), 0, 0, 0), brick.get()));
 
     // refraction ball
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(250,100,0), 100, Material(Vec(1, 1, 1), 0, 1, 0, 1.6))) );
+    std::unique_ptr<Object> obj3(new Sphere(vec3(250,100,0), 100, Material(vec3(1, 1, 1), 0, 1, 0, 1.6)));
 
     // mirror ball
-    scene.add( dynamic_cast<Object*>(new Sphere(Vec(-250,100,0), 100, Material(Vec(1, 1, 1), 1, 0, 0))) );
+    std::unique_ptr<Object> obj4(new Sphere(vec3(-250,100,0), 100, Material(vec3(1, 1, 1), 1, 0, 0)));
+
+    scene.add(obj1.get());
+    scene.add(obj2.get());
+    scene.add(obj3.get());
+    scene.add(obj4.get());
 
     drawMirror(&scene);
-    drawRoom(&scene, Vec(0, 500, 0), 500, brick, floor);
-    drawLeftLight(&scene, Vec(-499, 700, 0), 300);
+    drawRoom(&scene, vec3(0, 500, 0), 500, brick.get(), floor.get());
+    drawLeftLight(&scene, vec3(-499, 700, 0), 300);
     ////////////
 
     Renderer renderer = Renderer(&scene, &camera);
@@ -114,7 +119,7 @@ int main(int argc, char *argv[]) {
     drawScene(samples);
 
     time(&stop);
-    double diff = difftime(stop, start);
+    float diff = difftime(stop, start);
     int hrs = (int)diff/3600;
     int mins = ((int)diff/60)-(hrs*60);
     int secs = (int)diff-(hrs*3600)-(mins*60);

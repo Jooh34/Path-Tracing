@@ -1,34 +1,34 @@
-#include <vector>
-#include <stdio.h>
-#include <iostream>
-
 #include "renderer.h"
 #include "../lib/lodepng/lodepng.h"
-using namespace std;
 
-inline double clamp(double x){ return x<0 ? 0 : x>1 ? 1 : x; }
-inline int toInt(double x){ return int(clamp(x)*255+.5); }
+#include <vector>
+#include <iostream>
+#include <glm/glm.hpp>
+using namespace glm;
+
+inline float clamp(float x){ return x<0 ? 0 : x>1 ? 1 : x; }
+inline int toInt(float x){ return int(clamp(x)*255+.5); }
 
 Renderer::Renderer(Scene *scene, Camera *camera) {
     this->scene = scene;
     this->camera = camera;
-    pixel_buffer = new Vec[camera->width*camera->height];
+    pixel_buffer = new vec3[camera->width*camera->height];
 }
 
 void Renderer::render(int samples) {
     int width = camera->width;
     int height = camera->height;
     int x,y,s;
-    Vec color;
+    vec3 color;
 
     for(x = 0; x < width; x++) {
 
-        cout << "x : " << x << endl;
+        std::cout << "x : " << x << std::endl;
         for(y = 0; y< height; y++) {
-            Vec color = Vec();
+            vec3 color = vec3();
             for(s = 0; s < samples; s++) {
                 Ray ray = camera->getRay(x, y);
-                color = color + scene->traceRay(ray,0)/samples;
+                color = color + scene->traceRay(ray,0) * (1.0f/samples);
             }
             pixel_buffer[(y)*width + x] = color;
         }
