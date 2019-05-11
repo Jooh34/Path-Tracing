@@ -12,8 +12,9 @@ public:
 
     Scene(){};
     void add(Object *object);
+    void free();
     ObjectIntersection intersect(const Ray &ray);
-    vec3 traceRay(const Ray &ray, int depth);
+    vec3 traceRay(const Ray &ray, const int &depth);
 };
 
 #endif

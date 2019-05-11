@@ -85,19 +85,19 @@ void drawScene(int samples) {
     std::unique_ptr<Texture> floor(new Texture("../texture/floor.png"));
 
     // texture ball
-    std::unique_ptr<Object> obj1(new Sphere(vec3(0,100,0), 100, Material(vec3(1, 1, 1), 0.5, 0, 0.2), earth.get()));
-    std::unique_ptr<Object> obj2(new Sphere(vec3(0,100,200), 80, Material(vec3(1, 1, 1), 0, 0, 0), brick.get()));
+    Object* obj1 = new Sphere(vec3(0,100,0), 100, Material(vec3(1, 1, 1), 0.5, 0, 0.2), earth.get());
+    Object* obj2 = new Sphere(vec3(0,100,200), 80, Material(vec3(1, 1, 1), 0, 0, 0), brick.get());
 
     // refraction ball
-    std::unique_ptr<Object> obj3(new Sphere(vec3(250,100,0), 100, Material(vec3(1, 1, 1), 0, 1, 0, 1.6)));
+    Object* obj3 = new Sphere(vec3(250,100,0), 100, Material(vec3(1, 1, 1), 0, 1, 0, 1.6));
 
     // mirror ball
-    std::unique_ptr<Object> obj4(new Sphere(vec3(-250,100,0), 100, Material(vec3(1, 1, 1), 1, 0, 0)));
+    Object* obj4 = new Sphere(vec3(-250,100,0), 100, Material(vec3(1, 1, 1), 1, 0, 0));
 
-    scene.add(obj1.get());
-    scene.add(obj2.get());
-    scene.add(obj3.get());
-    scene.add(obj4.get());
+    scene.add(obj1);
+    scene.add(obj2);
+    scene.add(obj3);
+    scene.add(obj4);
 
     drawMirror(&scene);
     drawRoom(&scene, vec3(0, 500, 0), 500, brick.get(), floor.get());
@@ -107,6 +107,8 @@ void drawScene(int samples) {
     Renderer renderer = Renderer(&scene, &camera);
     renderer.render(samples);
     renderer.save_image("output.png");
+
+    scene.free();
 }
 
 int main(int argc, char *argv[]) {

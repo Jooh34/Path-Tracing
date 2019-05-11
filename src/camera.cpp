@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 using namespace glm;
 
-Camera::Camera(vec3 position, vec3 target, int width, int height, float vp_dist, int FOV) {
+Camera::Camera(vec3 &position, vec3 &target, int width, int height, float vp_dist, int FOV) {
     this->position = position;
     this->target = target;
     this->width = width;

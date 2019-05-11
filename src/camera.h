@@ -25,7 +25,7 @@ public:
 
     float radius;
 
-    Camera(vec3 position, vec3 target, int width, int height, float vp_dist, int FOV);
+    Camera(vec3 &position, vec3 &target, int width, int height, float vp_dist, int FOV);
     Ray getRay(int x, int y);
 };
 

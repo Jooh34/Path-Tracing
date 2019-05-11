@@ -14,7 +14,7 @@ Material::Material(vec3 color, float ks, float kr, float roughness, float r_i, v
     this->emittance = emittance;
 }
 
-Ray Material::getReflectedRay(const Ray &r, vec3 &p, const vec3 &n) {
+Ray Material::getReflectedRay(const Ray &r, const vec3 &p, const vec3 &n) {
   float rd = (float) rand() / (RAND_MAX);
   if (rd <= ks) { // reflection
       vec3 reflected_ray = r.direction - n * (2 * dot(n, r.direction));

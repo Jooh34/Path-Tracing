@@ -7,7 +7,7 @@ Texture :: Texture (const char* filename) {
     unsigned error = lodepng::decode(image, width, height, filename);
 }
 
-vec3 Texture :: getTextureColor(float u, float v) {
+vec3 Texture :: getTextureColor(const float &u, const float &v) {
     unsigned x = round((width * u)+0.5);
     unsigned y = round((height * v)+0.5);
 

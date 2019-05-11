@@ -17,7 +17,7 @@ public:
 
     Texture(const char* filename);
 
-    vec3 getTextureColor(float u, float v);
+    vec3 getTextureColor(const float &u, const float &v);
 };
 
 #endif

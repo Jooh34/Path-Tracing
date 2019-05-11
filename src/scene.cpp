@@ -7,6 +7,13 @@ void Scene::add(Object *object) {
     objects.push_back( object );
 }
 
+void Scene::free() {
+    for (std::vector<Object*>::iterator it = objects.begin() ; it != objects.end(); ++it) {
+        delete *it;
+    }
+    objects.clear();
+}
+
 ObjectIntersection Scene::intersect(const Ray &ray) {
     ObjectIntersection isct = ObjectIntersection();
     ObjectIntersection temp;
@@ -22,7 +29,7 @@ ObjectIntersection Scene::intersect(const Ray &ray) {
     return isct;
 }
 
-vec3 Scene::traceRay(const Ray &ray, int depth) {
+vec3 Scene::traceRay(const Ray &ray, const int &depth) {
     ObjectIntersection isct = intersect(ray);
     if (depth > 10) return vec3(0, 0, 0);
     if (!isct.hit) return vec3(0, 0, 0);

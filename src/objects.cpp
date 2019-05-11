@@ -18,7 +18,7 @@ ObjectIntersection::ObjectIntersection( bool hit, float u, vec3 n, Object* obj)
 //////////////////
 // Sphere
 //////////////////
-Sphere::Sphere( vec3 p, float r, Material m, Texture* texture) {
+Sphere::Sphere(vec3 p, float r, Material m, Texture* texture) {
 	this->p=p;
     this->r=r;
     this->m=m;
